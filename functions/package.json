@@ -7,14 +7,17 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "serve-all-seeds": "firebase emulators:start --import=../seeds/",
+    "export-all-seeds": "firebase emulators:export ../seeds"
   },
   "engines": {
     "node": "12"
   },
   "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^9.2.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^9.4.2",
     "firebase-functions": "^3.11.0"
   },
   "devDependencies": {
