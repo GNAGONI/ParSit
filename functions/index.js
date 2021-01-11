@@ -17,10 +17,10 @@ const auth = require("./utils/auth");
 
 const app = express();
 
-app.get("/todos", getAllTodos);
-app.post("/todo", createTodo);
-app.delete("/todo/:todoId", deleteTodo);
-app.put("/todo/:todoId", editTodo);
+app.get("/todos", auth, getAllTodos);
+app.post("/todo", auth, createTodo);
+app.delete("/todo/:todoId", auth, deleteTodo);
+app.put("/todo/:todoId", auth, editTodo);
 
 app.post("/login", loginUser);
 app.post("/signup", signUpUser);

@@ -2,6 +2,7 @@ const { db } = require("../utils/admin");
 
 const getAllTodos = (request, response) => {
   db.collection("todos")
+    .where("username", "==", request.user.username)
     .orderBy("createdAt", "desc")
     .get()
     .then((data) => {
@@ -33,6 +34,7 @@ const createTodo = (request, response) => {
     title: request.body.title,
     body: request.body.body,
     createdAt: new Date().toISOString(),
+    username: request.user.username,
   };
 
   db.collection("todos")
@@ -57,6 +59,9 @@ const deleteTodo = (request, response) => {
   document
     .get()
     .then((doc) => {
+      if (doc.data().username !== request.user.username) {
+        return response.status(403).json({ message: "Unauthorized" });
+      }
       if (!doc.exists) {
         return response.status(404).json({ message: "Todo not found" });
       }
@@ -71,7 +76,7 @@ const deleteTodo = (request, response) => {
     });
 };
 
-const editTodo = (request, response) => {
+const editTodo = async (request, response) => {
   const todoId = request.params.todoId;
   if (!todoId) {
     return response.status(400).json({ message: "Toto id is not provided" });
@@ -85,15 +90,28 @@ const editTodo = (request, response) => {
       .json({ message: "There are no fields to update in todo" });
   }
   const document = db.doc(`/todos/${todoId}`);
-  document
-    .update(request.body)
-    .then(() => {
-      return response.json({ message: "Updated successfully" });
+  const isAllowedToEdit = await document
+    .get()
+    .then((doc) => {
+      return doc.data().username === request.user.username;
     })
     .catch((e) => {
       console.error(e);
-      return response.status(500).json({ message: "Update failed" });
+      return false;
     });
+  if (isAllowedToEdit) {
+    document
+      .update(request.body)
+      .then(() => {
+        return response.json({ message: "Updated successfully" });
+      })
+      .catch((e) => {
+        console.error(e);
+        return response.status(500).json({ message: "Update failed" });
+      });
+  } else {
+    return response.status(403).json({ message: "Forbidden to edit todo" });
+  }
 };
 
 module.exports = {
