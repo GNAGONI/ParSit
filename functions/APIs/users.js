@@ -1,30 +1,15 @@
-const firebase = require("firebase");
 const BusBoy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const { v4: uuid } = require("uuid");
 const { admin, db } = require("../utils/admin");
+const { auth } = require("../utils/firebase");
 const config = require("../utils/config");
 const {
   validateLoginData,
   validateSignUpData,
 } = require("../utils/validators");
-
-firebase.initializeApp(config);
-
-const functions = firebase.functions();
-const firestore = firebase.firestore();
-const database = firebase.database();
-const auth = firebase.auth();
-
-const isDev = true;
-if (isDev) {
-  functions.useEmulator("localhost", 5001);
-  firestore.useEmulator("localhost", 8080);
-  database.useEmulator("localhost", 9000);
-  auth.useEmulator("http://localhost:9099");
-}
 
 const loginUser = (request, response) => {
   const user = {
