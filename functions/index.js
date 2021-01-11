@@ -6,7 +6,13 @@ const {
   deleteTodo,
   editTodo,
 } = require("./APIs/todos");
-const { loginUser, signUpUser, uploadProfilePhoto } = require("./APIs/users");
+const {
+  loginUser,
+  signUpUser,
+  uploadProfilePhoto,
+  getUser,
+  editUser,
+} = require("./APIs/users");
 const auth = require("./utils/auth");
 
 const app = express();
@@ -19,5 +25,7 @@ app.put("/todo/:todoId", editTodo);
 app.post("/login", loginUser);
 app.post("/signup", signUpUser);
 app.post("/user/image", auth, uploadProfilePhoto);
+app.get("/user", auth, getUser);
+app.put("/user", auth, editUser);
 
 exports.api = functions.https.onRequest(app);

@@ -176,14 +176,54 @@ const uploadProfilePhoto = (request, response) => {
       })
       .catch((error) => {
         console.error(error);
-        return response.status(500).json({ error: "Image uploading failed" });
+        return response.status(500).json({ message: "Image uploading failed" });
       });
   });
   busboy.end(request.rawBody);
+};
+
+const getUser = (request, response) => {
+  db.doc(`/users/${request.user.username}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const userData = doc.data();
+        return response.json(userData);
+      } else {
+        return response.status(404).json({ message: "User not found" });
+      }
+    })
+    .catch((e) => {
+      console.error(e);
+      return response.status(500).json({ message: "User data request failed" });
+    });
+};
+
+const editUser = (request, response) => {
+  if (
+    request.body.createdAt ||
+    request.body.username ||
+    request.body.email ||
+    request.body.userId
+  ) {
+    return response.status(403).json({ message: "Not allowed to edit" });
+  }
+  const document = db.doc(`/users/${request.user.username}`);
+  document
+    .update(request.body)
+    .then(() => {
+      return response.json({ message: "Updated successfully" });
+    })
+    .catch((e) => {
+      console.error(e);
+      return response.status(500).json({ message: "Update failed" });
+    });
 };
 
 module.exports = {
   loginUser,
   signUpUser,
   uploadProfilePhoto,
+  getUser,
+  editUser,
 };
