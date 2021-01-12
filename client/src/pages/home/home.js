@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-
-import Account from "../components/account";
-import Todo from "../components/todo";
-
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,46 +16,10 @@ import NotesIcon from "@material-ui/icons/Notes";
 import Avatar from "@material-ui/core/avatar";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-import { authMiddleWare } from "../utils/auth";
-
-const drawerWidth = 240;
-
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  avatar: {
-    height: 110,
-    width: 100,
-    flexShrink: 0,
-    flexGrow: 0,
-    marginTop: 20,
-  },
-  uiProgess: {
-    position: "fixed",
-    zIndex: "1000",
-    height: "31px",
-    width: "31px",
-    left: "50%",
-    top: "35%",
-  },
-  toolbar: theme.mixins.toolbar,
-});
+import styles from "./styles";
+import { authMiddleWare } from "../../utils/auth";
+import Account from "../../components/account/account";
+import Todo from "../../components/todo/todo";
 
 class Home extends Component {
   state = {
