@@ -10,8 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import axios from "axios";
 import styles from "./styles";
+import api from "../../api";
 
 class Login extends Component {
   constructor(props) {
@@ -46,10 +46,9 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/login`, userData)
+    api
+      .post("/login", userData)
       .then((response) => {
-        console.log(response);
         localStorage.setItem("AuthToken", `Bearer ${response.data.token}`);
         this.setState({
           loading: false,

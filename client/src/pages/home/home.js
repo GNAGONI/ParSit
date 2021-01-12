@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,6 +19,7 @@ import styles from "./styles";
 import { authMiddleWare } from "../../utils/auth";
 import Account from "../../components/account/account";
 import Todo from "../../components/todo/todo";
+import api from "../../api";
 
 class Home extends Component {
   state = {
@@ -54,9 +54,9 @@ class Home extends Component {
   componentWillMount = () => {
     authMiddleWare(this.props.history);
     const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/user`)
+    api.defaults.headers.common = { Authorization: `${authToken}` };
+    api
+      .get("/user")
       .then((response) => {
         console.log(response.data);
         this.setState({

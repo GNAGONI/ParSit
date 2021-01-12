@@ -13,9 +13,9 @@ import {
   TextField,
 } from "@material-ui/core";
 import clsx from "clsx";
-import axios from "axios";
 import styles from "./styles";
 import { authMiddleWare } from "../../utils/auth";
+import api from "../../api";
 
 class Account extends Component {
   constructor(props) {
@@ -38,9 +38,9 @@ class Account extends Component {
   componentWillMount = () => {
     authMiddleWare(this.props.history);
     const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/user`)
+    api.defaults.headers.common = { Authorization: `${authToken}` };
+    api
+      .get("/user")
       .then((response) => {
         console.log(response.data);
         this.setState({
@@ -84,9 +84,9 @@ class Account extends Component {
     let form_data = new FormData();
     form_data.append("image", this.state.image);
     form_data.append("content", this.state.content);
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/user/image`, form_data, {
+    api.defaults.headers.common = { Authorization: `${authToken}` };
+    api
+      .post("/user/image", form_data, {
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -111,14 +111,14 @@ class Account extends Component {
     this.setState({ buttonLoading: true });
     authMiddleWare(this.props.history);
     const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    api.defaults.headers.common = { Authorization: `${authToken}` };
     const formRequest = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       country: this.state.country,
     };
-    axios
-      .put(`${process.env.REACT_APP_API_URL}/user`, formRequest)
+    api
+      .put("/user", formRequest)
       .then(() => {
         this.setState({ buttonLoading: false });
       })

@@ -17,11 +17,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import CardContent from "@material-ui/core/CardContent";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import styles from "./styles";
 import { authMiddleWare } from "../../utils/auth";
+import api from "../../api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -57,9 +57,9 @@ class Todo extends Component {
   componentWillMount = () => {
     authMiddleWare(this.props.history);
     const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/todos`)
+    api.defaults.headers.common = { Authorization: `${authToken}` };
+    api
+      .get("/todos")
 
       .then((response) => {
         this.setState({
@@ -75,10 +75,10 @@ class Todo extends Component {
   deleteTodoHandler(data) {
     authMiddleWare(this.props.history);
     const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    api.defaults.headers.common = { Authorization: `${authToken}` };
     let todoId = data.todo.todoId;
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/todo/${todoId}`)
+    api
+      .delete(`/todo/${todoId}`)
       .then(() => {
         window.location.reload();
       })
@@ -154,20 +154,20 @@ class Todo extends Component {
       let options = {};
       if (this.state.buttonType === "Edit") {
         options = {
-          url: `${process.env.REACT_APP_API_URL}/todo/${this.state.todoId}`,
+          url: `/todo/${this.state.todoId}`,
           method: "put",
           data: userTodo,
         };
       } else {
         options = {
-          url: `${process.env.REACT_APP_API_URL}/todo`,
+          url: "/todo",
           method: "post",
           data: userTodo,
         };
       }
       const authToken = localStorage.getItem("AuthToken");
-      axios.defaults.headers.common = { Authorization: `${authToken}` };
-      axios(options)
+      api.defaults.headers.common = { Authorization: `${authToken}` };
+      api(options)
         .then(() => {
           this.setState({ open: false });
           window.location.reload();
