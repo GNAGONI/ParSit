@@ -19,19 +19,24 @@ import styles from "./styles";
 import { authMiddleWare } from "../../utils/auth";
 import Account from "../../components/account/account";
 import Todo from "../../components/todo/todo";
+import Payment from "../../components/payment/payment";
 import api from "../../api";
 
 class Home extends Component {
   state = {
-    render: false,
+    component: <Todo />,
   };
 
   loadAccountPage = (event) => {
-    this.setState({ render: true });
+    this.setState({ component: <Account /> });
   };
 
   loadTodoPage = (event) => {
-    this.setState({ render: false });
+    this.setState({ component: <Todo /> });
+  };
+
+  loadPaymentPage = (event) => {
+    this.setState({ component: <Payment /> });
   };
 
   logoutHandler = (event) => {
@@ -138,6 +143,14 @@ class Home extends Component {
                 <ListItemText primary="Account" />
               </ListItem>
 
+              <ListItem button key="Payment" onClick={this.loadPaymentPage}>
+                <ListItemIcon>
+                  {" "}
+                  <AccountBoxIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Payment" />
+              </ListItem>
+
               <ListItem button key="Logout" onClick={this.logoutHandler}>
                 <ListItemIcon>
                   {" "}
@@ -148,7 +161,7 @@ class Home extends Component {
             </List>
           </Drawer>
 
-          <div>{this.state.render ? <Account /> : <Todo />}</div>
+          <div>{this.state.component}</div>
         </div>
       );
     }

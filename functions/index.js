@@ -14,6 +14,14 @@ const {
   getUser,
   editUser,
 } = require("./APIs/users");
+const {
+  getAllCustomers,
+  createCustomerWithFundingSource,
+  createTransfer,
+  verifyFundingSource,
+  updateCustomer,
+  updateFundingSource,
+} = require("./APIs/payments");
 const auth = require("./utils/auth");
 
 const app = express();
@@ -29,5 +37,12 @@ app.post("/signup", signUpUser);
 app.post("/user/image", auth, uploadProfilePhoto);
 app.get("/user", auth, getUser);
 app.put("/user", auth, editUser);
+
+app.get("/payment/customers", getAllCustomers);
+app.post("/payment/create-customer", createCustomerWithFundingSource);
+app.post("/payment/update-customer", updateCustomer);
+app.post("/payment/create-transfer", createTransfer);
+app.post("/payment/verify-funding-source", verifyFundingSource);
+app.post("/payment/update-funding-source", updateFundingSource);
 
 exports.api = functions.https.onRequest(app);
