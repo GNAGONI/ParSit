@@ -22,6 +22,7 @@ const {
   updateCustomer,
   updateFundingSource,
 } = require("./APIs/payments");
+const { sendMessage } = require("./APIs/messages");
 const auth = require("./utils/auth");
 
 const app = express();
@@ -44,5 +45,7 @@ app.post("/payment/update-customer", updateCustomer);
 app.post("/payment/create-transfer", createTransfer);
 app.post("/payment/verify-funding-source", verifyFundingSource);
 app.post("/payment/update-funding-source", updateFundingSource);
+
+app.post("/messaging/send-message", sendMessage);
 
 exports.api = functions.https.onRequest(app);

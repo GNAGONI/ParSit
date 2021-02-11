@@ -9,8 +9,10 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const fcm = admin.messaging();
 
 module.exports = {
   admin,
   db,
+  fcm,
 };
